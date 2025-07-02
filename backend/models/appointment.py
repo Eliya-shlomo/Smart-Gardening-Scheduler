@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
 import enum
+from backend.database import Base
 
-Base = declarative_base()
 
 class AppointmentStatus(enum.Enum):
     scheduled = "scheduled"

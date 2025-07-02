@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
+from backend.database import Base
 
-Base = declarative_base()
 
 class EmailLog(Base):
     __tablename__ = "email_logs"

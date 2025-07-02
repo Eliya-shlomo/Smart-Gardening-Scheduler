@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
-
-Base = declarative_base()
+from backend.database import Base
 
 class Client(Base):
     __tablename__ = "clients"
