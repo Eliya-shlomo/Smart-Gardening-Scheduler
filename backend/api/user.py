@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from backend.schemas.user import UserCreate, UserLogin, UserResponse, Token
 from backend.database import get_db
@@ -13,7 +14,22 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     existing_user = get_user_by_email(db, user_in.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
-    return create_user(db, user_in)
+
+    try:
+        new_user = create_user(db, user_in)
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Invalid input: {e.errors()}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Could not create user: {str(e)}"
+        )
+
+    return new_user
+
 
 @router.post("/login", response_model=Token)
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
