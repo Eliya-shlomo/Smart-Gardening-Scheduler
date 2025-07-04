@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from backend.database import engine
 from backend.models import Base
-from backend.api import user
+from backend.api import user, client
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
 app.include_router(user.router)
+app.include_router(client.router)  
 
 
 
