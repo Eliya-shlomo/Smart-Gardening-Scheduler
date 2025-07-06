@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from backend import models
 from backend.schemas.appointment import AppointmentCreate, AppointmentUpdate
 
+## by getting the client_id on the payload and checks if the user is approved by get_current_user.
 def create_appointment(db: Session, appointment_in: AppointmentCreate):
     appointment = models.Appointment(**appointment_in.model_dump())
     db.add(appointment)

@@ -2,6 +2,9 @@ import os
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
+## config file for app. 
+## variables for db and alembic.
+## variables from .env os loaded here for the alembic to read them on run time.
 env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.env'))
 load_dotenv(dotenv_path=env_path)
 
@@ -17,6 +20,11 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     DATABASE_URL: str
     SECRET_KEY: str = "supersecret"
+    MAIL_FROM: str
+    SMTP_SERVER: str
+    SMTP_PORT: int
+    SMTP_USERNAME: str
+    SMTP_PASSWORD: str
 
     class Config:
         env_file = ".env"

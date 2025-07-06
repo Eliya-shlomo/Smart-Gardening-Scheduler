@@ -2,17 +2,20 @@ from typing_extensions import Annotated
 from pydantic import BaseModel, EmailStr , StringConstraints
 from typing import Optional
 
+hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _-]{3,100}$'
+
+## Annotated option is given to restrict the way data is enter db
 class UserBase(BaseModel):
     email: EmailStr
-    name: Annotated[str,StringConstraints(pattern=r'^[a-zA-Z0-9_]{3,20}$')] 
-    phone: Optional[Annotated[str, StringConstraints(min_length=9,max_length=10,pattern=r'^\d+$')]] = None
+    name: Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)] 
+    phone: Annotated[str, StringConstraints(min_length=9,max_length=10,pattern=r'^\d+$')]
 
 class UserCreate(UserBase):
-    password: Annotated[str,StringConstraints(pattern=r'^[a-zA-Z0-9_]{3,20}$')]
+    password: Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)]
 
 class UserLogin(BaseModel):
     email: EmailStr
-    password: Annotated[str,StringConstraints(pattern=r'^[a-zA-Z0-9_]{3,20}$')]
+    password: Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)]
 
 class UserResponse(UserBase):
     id: int

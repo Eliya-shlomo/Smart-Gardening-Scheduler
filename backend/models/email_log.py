@@ -9,6 +9,6 @@ class EmailLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     template_name = Column(String, nullable=False)
-    sent_at = Column(DateTime, default=datetime.utcnow)
+    sent_at = Column(DateTime, default=datetime.now())
     recipient_email = Column(String, nullable=False)
     status = Column(String)  

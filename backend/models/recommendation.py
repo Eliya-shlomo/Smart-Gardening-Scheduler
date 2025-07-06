@@ -8,7 +8,7 @@ class Recommendation(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String, nullable=False)  
-    send_date = Column(DateTime, default=datetime.utcnow)
+    send_date = Column(DateTime, default=datetime.now())
     notes = Column(Text)
     tree_id = Column(Integer, ForeignKey("trees.id"))
 

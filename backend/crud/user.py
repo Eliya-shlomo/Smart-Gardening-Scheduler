@@ -3,6 +3,7 @@ from backend import models
 from backend.schemas.user import UserCreate
 from backend.utils.security import hash_password, verify_password
 
+## check if user ix exciting by email
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
@@ -18,7 +19,7 @@ def create_user(db: Session, user: UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
-
+## hash the given pass and compare it to the excited pass on db
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)
     if not user:
