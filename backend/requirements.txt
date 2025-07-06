@@ -3,3 +3,4 @@ alembic
 jose
 passlib
 jwt
+apscheduler
