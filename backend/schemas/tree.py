@@ -1,7 +1,7 @@
 # Tree schema for getting notes for each tree -> lets say the particular tree need's note for his condition or healthy ect
 from datetime import datetime
 from typing_extensions import Annotated
-from pydantic import BaseModel, EmailStr , StringConstraints
+from pydantic import BaseModel, StringConstraints
 from typing import Optional
 
 class TreeBase(BaseModel):

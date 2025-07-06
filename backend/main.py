@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from backend.database import engine
 from backend.models import Base
-from backend.api import user, client, tree
+from backend.api import user, client, tree, appointment
 
 app = FastAPI()
 
@@ -10,6 +10,8 @@ Base.metadata.create_all(bind=engine)
 app.include_router(user.router)
 app.include_router(client.router)  
 app.include_router(tree.router)  
+app.include_router(appointment.router)
+
 
 
 
