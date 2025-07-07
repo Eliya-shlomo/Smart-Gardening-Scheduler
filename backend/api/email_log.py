@@ -4,6 +4,7 @@ from backend.database import get_db
 from backend.api.deps import get_current_user
 from backend.schemas.email_log import EmailLogResponse
 from backend import models
+from backend.services.reports import get_email_logs_summary
 
 router = APIRouter(prefix="/emaillogs", tags=["Email Logs"])
 
@@ -12,6 +13,7 @@ def get_email_logs(db: Session = Depends(get_db), current_user: models.User = De
     return db.query(models.EmailLog).filter(models.EmailLog.recipient_email.in_(
         [c.email for c in current_user.clients]
     )).order_by(models.EmailLog.sent_at.desc()).all()
+
 
 
 @router.get("/emails")
