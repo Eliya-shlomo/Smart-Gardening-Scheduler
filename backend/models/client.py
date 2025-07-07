@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from backend.database import Base
@@ -11,6 +12,8 @@ class Client(Base):
     address = Column(String)
     phone = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.now())  
+
 
     user = relationship("User", back_populates="clients")
     trees = relationship("Tree", back_populates="client")

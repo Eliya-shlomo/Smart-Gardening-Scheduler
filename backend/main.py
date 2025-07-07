@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from backend.database import engine
 from backend.models import Base
-from backend.api import user, client, tree, appointment,recommendation
+from backend.api import user, client, tree, appointment,recommendation, reports
 from backend.services.scheduler import start_scheduler
-
 
 app = FastAPI()
 
@@ -14,6 +13,7 @@ app.include_router(client.router)
 app.include_router(tree.router)  
 app.include_router(appointment.router)
 app.include_router(recommendation.router)
+app.include_router(reports.router)
 
 
 
@@ -22,6 +22,6 @@ app.include_router(recommendation.router)
 
 @app.get("/")
 def read_root():
-    start_scheduler()
+    # start_scheduler()
     return {"message": "Smart Gardening API is up!"}
 
