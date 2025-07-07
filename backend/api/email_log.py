@@ -12,3 +12,11 @@ def get_email_logs(db: Session = Depends(get_db), current_user: models.User = De
     return db.query(models.EmailLog).filter(models.EmailLog.recipient_email.in_(
         [c.email for c in current_user.clients]
     )).order_by(models.EmailLog.sent_at.desc()).all()
+
+
+@router.get("/emails")
+def email_logs_summary(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return get_email_logs_summary(db, current_user)

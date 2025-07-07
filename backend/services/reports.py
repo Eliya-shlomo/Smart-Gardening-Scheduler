@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Counter
 from sqlalchemy.orm import Session
 from backend import models
 
@@ -30,4 +31,29 @@ def get_monthly_report_logic(db: Session, user: models.User):
         "appointments_total": total_appointments,
         "appointments_done": completed_appointments,
         "recommendations_sent": recommendations
+    }
+
+
+
+def get_email_logs_summary(db: Session, user: models.User):
+    now = datetime.now()
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    client_emails = [c.email for c in user.clients]
+
+    logs = db.query(models.EmailLog).filter(
+        models.EmailLog.recipient_email.in_(client_emails),
+        models.EmailLog.sent_at >= start_of_month
+    ).all()
+
+    sent = sum(1 for log in logs if log.status == "sent")
+    failed = sum(1 for log in logs if log.status == "failed")
+
+    per_client = Counter(log.recipient_email for log in logs)
+
+    return {
+        "month": now.strftime("%B %Y"),
+        "total_sent": sent,
+        "total_failed": failed,
+        "by_client": per_client
     }
