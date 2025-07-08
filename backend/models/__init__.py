@@ -6,3 +6,5 @@ from .appointment import Appointment, AppointmentStatus
 from .recommendation import Recommendation
 from .email_log import EmailLog
 from .recommendation import Recommendation
+from .token import RefreshToken
+from .audit_log import AuditLog

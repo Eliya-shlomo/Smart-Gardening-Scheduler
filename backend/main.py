@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from backend.database import engine
 from backend.models import Base
-from backend.api import user, client, tree, appointment,recommendation, reports, email_log
-from backend.services.scheduler import start_scheduler
+from backend.api import user, client, tree, appointment,recommendation, reports, email_log, audit_log
+# from backend.services.scheduler import start_scheduler
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
@@ -14,6 +14,8 @@ app.include_router(appointment.router)
 app.include_router(recommendation.router)
 app.include_router(reports.router)
 app.include_router(email_log.router)
+app.include_router(audit_log.router)
+
 
 
 

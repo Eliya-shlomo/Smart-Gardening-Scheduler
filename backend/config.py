@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     SMTP_PORT: int
     SMTP_USERNAME: str
     SMTP_PASSWORD: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     class Config:
         env_file = ".env"

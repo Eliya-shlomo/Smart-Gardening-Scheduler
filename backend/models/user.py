@@ -13,3 +13,4 @@ class User(Base):
     phone = Column(String)
 
     clients = relationship("Client", back_populates="user")
+    audit_logs = relationship("AuditLog", back_populates="user")
