@@ -53,6 +53,8 @@ def update_client(
 
     client.name = client_in.name
     client.address = client_in.address
+    client.phone = client_in.phone 
+
     db.commit()
     db.refresh(client)
 

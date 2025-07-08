@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import get_db
-from backend.schemas.tree import TreeCreate, TreeResponse
+from backend.schemas.tree import TreeCreate, TreeResponse, TreeUpdate
 from backend.api.deps import get_current_user
 from backend.models.user import User
 from backend.models.client import Client
@@ -57,7 +57,7 @@ def get_tree_by_id(tree_id: int, db: Session = Depends(get_db), current_user: Us
 @router.put("/{tree_id}", response_model=TreeResponse)
 def update_tree(
     tree_id: int,
-    tree_in: TreeCreate,
+    tree_in: TreeUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -66,7 +66,8 @@ def update_tree(
         raise HTTPException(status_code=403, detail="Access denied or tree not found")
 
     tree.type = tree_in.type
-    tree.client_id = tree_in.client_id
+    tree.planting_date = tree_in.planting_date
+    tree.notes = tree_in.notes
     db.commit()
     db.refresh(tree)
 

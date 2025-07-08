@@ -14,7 +14,7 @@ class AppointmentStatus(str, Enum):
 
 class AppointmentBase(BaseModel):
     date: datetime
-    time: Annotated[str,StringConstraints(pattern=r'^[0-9_-]{3,50}$')] = None 
+    time: Annotated[str,StringConstraints(pattern=r'^\d{2}:\d{2}$')] = None 
     treatment_type: Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)]
     notes: Optional[Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)]] = None
 
