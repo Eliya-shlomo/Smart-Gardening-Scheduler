@@ -4,3 +4,12 @@ jose
 passlib
 jwt
 apscheduler
+dotenv
+fastapi
+pydantic
+pydantic-settings
+psycopg2-binary
+email-validator
+uvicorn
+python-jose
+bcrypt
