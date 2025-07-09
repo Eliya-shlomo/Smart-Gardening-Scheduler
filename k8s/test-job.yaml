@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: scheduler-tests
+  generateName: scheduler-tests-
 spec:
   template:
     metadata:
@@ -13,7 +13,8 @@ spec:
       containers:
         - name: tests
           image: 261303806788.dkr.ecr.us-east-1.amazonaws.com/smart-gardening-scheduler
-          command: ["pytest"]
+          imagePullPolicy: Always
+          command: ["sh", "-c", "ls -la && pytest tests"]
           env:
             - name: DATABASE_URL
               valueFrom:
