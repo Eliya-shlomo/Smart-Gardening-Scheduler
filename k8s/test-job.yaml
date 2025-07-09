@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: scheduler-tests
+spec:
+  template:
+    metadata:
+      labels:
+        job: scheduler-tests
+    spec:
+      imagePullSecrets:
+        - name: ecr-secret  
+      containers:
+        - name: tests
+          image: 261303806788.dkr.ecr.us-east-1.amazonaws.com/smart-gardening-scheduler
+          command: ["pytest"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: DATABASE_URL
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: POSTGRES_PASSWORD
+            - name: SMTP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_SERVER
+            - name: SMTP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_PORT
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: SMTP_USERNAME
+            - name: MAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: MAIL_FROM
+      restartPolicy: Never

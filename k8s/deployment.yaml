@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      imagePullSecrets:
+        - name: ecr-secret
+      containers:
+        - name: scheduler
+          image: 261303806788.dkr.ecr.us-east-1.amazonaws.com/smart-gardening-scheduler
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: DATABASE_URL
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: POSTGRES_PASSWORD
+            - name: SMTP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_SERVER
+            - name: SMTP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_PORT
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: SMTP_USERNAME
+            - name: MAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: MAIL_FROM
