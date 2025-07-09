@@ -140,3 +140,14 @@ async def test_access_client_of_other_user(client):
 # User 2 tries to delete user 1's client
     res = await client.delete(f"/clients/{client_id}", headers=headers_user2)
     assert res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_unauthorized_access(client):
+    # ניסיון לקבל את רשימת הלקוחות ללא token
+    res = await client.get("/clients/")
+    assert res.status_code == 401
+
+    # ניסיון ליצור לקוח ללא token
+    res = await client.post("/clients/", json={"name": "NoAuth"})
+    assert res.status_code == 401
