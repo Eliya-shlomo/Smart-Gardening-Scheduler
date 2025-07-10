@@ -4,35 +4,48 @@ pipeline {
   environment {
     AWS_REGION = "us-east-1"
     ECR_REPO = "261303806788.dkr.ecr.us-east-1.amazonaws.com/smart-gardening-scheduler"
-    GIT_BRANCH = "main" 
+    IMAGE_TAG = "dev-${env.BUILD_NUMBER}"
   }
 
   stages {
-    stage('Checkout Code') {
+    stage('Checkout') {
       steps {
         checkout scm
       }
     }
 
-    stage('Build Docker :test') {
+    stage('Save current latest digest') {
       steps {
-        sh 'docker build -t $ECR_REPO:test .'
+        withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+          sh '''
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region $AWS_REGION
+            aws ecr batch-get-image \
+              --repository-name smart-gardening-scheduler \
+              --image-ids imageTag=latest \
+              --query 'images[0].imageDigest' \
+              --output text > latest_digest.txt || echo "none" > latest_digest.txt
+          '''
+        }
       }
     }
 
-    stage('Push :test to ECR') {
+    stage('Build Docker Image') {
       steps {
-        withCredentials([usernamePassword(
-          credentialsId: 'aws-credentials',
-          usernameVariable: 'AWS_ACCESS_KEY_ID',
-          passwordVariable: 'AWS_SECRET_ACCESS_KEY'
-        )]) {
+        sh 'docker build -t $ECR_REPO:$IMAGE_TAG .'
+      }
+    }
+
+    stage('Push Image to ECR') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
           sh '''
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             aws configure set region $AWS_REGION
             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
-            docker push $ECR_REPO:test
+            docker push $ECR_REPO:$IMAGE_TAG
           '''
         }
       }
@@ -41,47 +54,62 @@ pipeline {
     stage('Run K8s Test Job') {
       steps {
         sh '''
-          kubectl delete job scheduler-test-job --ignore-not-found
-          kubectl apply -f k8s/test-job.yaml
+          kubectl delete job scheduler-test-job --ignore-not-found || true
+          sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl apply -f -
           ./scripts/wait_for_job.sh scheduler-test-job
         '''
       }
     }
 
+    stage('Merge dev → main') {
+      when {
+        branch 'dev'
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+      }
+      steps {
+        sshagent (credentials: ['git-ssh-key']) {
+          sh '''
+            git config --global user.name "jenkins"
+            git config --global user.email "jenkins@ci"
+            git checkout main
+            git pull origin main
+            git merge dev --no-edit
+            git push origin main
+          '''
+        }
+      }
+    }
+
     stage('Tag & Push :latest') {
+      when {
+        branch 'dev'
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+      }
       steps {
         sh '''
-          docker tag $ECR_REPO:test $ECR_REPO:latest
+          docker tag $ECR_REPO:$IMAGE_TAG $ECR_REPO:latest
           docker push $ECR_REPO:latest
         '''
       }
     }
 
     stage('Deploy to K8s') {
+      when {
+        branch 'dev'
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+      }
       steps {
         sh 'kubectl apply -f k8s/deployment.yaml'
-      }
-    }
-
-    stage('Push to Git (optional)') {
-      steps {
-        sh '''
-          git config user.email "jenkins@ci"
-          git config user.name "Jenkins CI"
-          git add .
-          git commit -m "CI: Successful build & deploy [skip ci]" || echo "No changes to commit"
-          git push origin $GIT_BRANCH
-        '''
       }
     }
   }
 
   post {
     failure {
-      echo "❌ Pipeline failed. Deployment was not performed."
+      echo "❌ Build or tests failed. main was not updated, and :latest remains unchanged."
     }
     success {
-      echo "✅ Pipeline completed successfully."
+      echo "✅ Pipeline completed successfully. main and :latest updated only after passing tests."
     }
   }
 }
