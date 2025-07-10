@@ -54,11 +54,11 @@ pipeline {
     stage('Run K8s Test Job') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh '''
-            kubectl delete job scheduler-test-job --ignore-not-found --wait=true || true
-            sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl apply -f -
-            ./scripts/wait_for_job.sh scheduler-tests
-          '''
+        sh '''
+          kubectl delete job scheduler-test-job --ignore-not-found --wait=true
+          sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
+          ./scripts/wait_for_job.sh scheduler-test-job
+        '''
         }
       }
     }
