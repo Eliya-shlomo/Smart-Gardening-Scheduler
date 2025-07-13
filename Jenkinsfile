@@ -67,7 +67,7 @@ pipeline {
     stage('Merge dev → main') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-tests', returnStatus: true) == 0 }
       }
       steps {
         sshagent (credentials: ['git-ssh-key']) {
