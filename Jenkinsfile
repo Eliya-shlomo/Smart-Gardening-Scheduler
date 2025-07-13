@@ -75,7 +75,7 @@ pipeline {
             git config --global user.name "jenkins"
             git config --global user.email "jenkins@ci"
             git fetch origin main
-            git checkout main
+            git checkout -B main origin/main
             git pull origin main
             git merge dev --no-edit
             git push origin main
