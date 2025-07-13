@@ -86,7 +86,7 @@ pipeline {
     stage('Tag & Push :latest') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-tests', returnStatus: true) == 0 }
       }
       steps {
         sh '''
@@ -99,7 +99,7 @@ pipeline {
     stage('Deploy to K8s') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-tests', returnStatus: true) == 0 }
       }
       steps {
         sh 'kubectl apply -f k8s/deployment.yaml'
