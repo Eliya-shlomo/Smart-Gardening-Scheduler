@@ -55,7 +55,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
         sh '''
-          kubectl delete job scheduler-test-job --ignore-not-found --wait=true
+          kubectl delete job scheduler-test --ignore-not-found --wait=true
           sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
           ./scripts/wait_for_job.sh scheduler-tests
         '''
@@ -67,7 +67,7 @@ pipeline {
     stage('Merge dev → main') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
       }
       steps {
         sshagent (credentials: ['git-ssh-key']) {
@@ -86,7 +86,7 @@ pipeline {
     stage('Tag & Push :latest') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
       }
       steps {
         sh '''
@@ -99,7 +99,7 @@ pipeline {
     stage('Deploy to K8s') {
       when {
         branch 'dev'
-        expression { sh(script: './scripts/wait_for_job.sh scheduler-test-job', returnStatus: true) == 0 }
+        expression { sh(script: './scripts/wait_for_job.sh scheduler-test', returnStatus: true) == 0 }
       }
       steps {
         sh 'kubectl apply -f k8s/deployment.yaml'
