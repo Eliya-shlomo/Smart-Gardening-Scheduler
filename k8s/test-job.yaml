@@ -56,4 +56,9 @@ spec:
                 secretKeyRef:
                   name: gardening-secret
                   key: MAIL_FROM
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: SMTP_PASSWORD
       restartPolicy: Never
