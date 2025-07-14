@@ -12,5 +12,4 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     phone = Column(String)
 
-    clients = relationship("Client", back_populates="user")
-    audit_logs = relationship("AuditLog", back_populates="user")
+    refresh_tokens = relationship("RefreshToken", back_populates="user")
