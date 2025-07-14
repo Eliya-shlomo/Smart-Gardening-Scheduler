@@ -71,7 +71,7 @@ pipeline {
       }
     }
 
-    stage('Merge dev → main') {
+    stage('Merge dev → main (squash)') {
       when {
         branch 'dev'
         expression { return fileExists('job_result.txt') && readFile('job_result.txt').trim() == 'success' }
@@ -81,16 +81,29 @@ pipeline {
           sh '''
             git config --global user.name "jenkins"
             git config --global user.email "jenkins@ci"
-            git fetch origin main
+
+            git fetch origin
             git checkout -B main origin/main
             git pull origin main
-            git merge origin/dev --no-edit
+            git checkout dev
+            git pull origin dev
+
+            # keep the last commit Description
+            LAST_MSG=$(git log -1 --pretty=%B)
+
+            # squash all dev last's commits
+            git checkout main
+            git merge --squash dev
+            git commit -m "$LAST_MSG"
+
+            
             git remote set-url origin git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git
             git push origin main
           '''
         }
       }
     }
+
 
     stage('Tag & Push :latest') {
       when {
