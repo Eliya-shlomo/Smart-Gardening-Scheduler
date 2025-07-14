@@ -10,8 +10,16 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        checkout scm
-      }
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: '*/dev']],
+          userRemoteConfigs: [[
+            url: 'git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git',
+            credentialsId: 'git-ssh-key',
+            refspec: '+refs/heads/*:refs/remotes/origin/*'
+          ]]
+        ])
+      } 
     }
 
     stage('Save current latest digest') {
@@ -54,15 +62,14 @@ pipeline {
     stage('Run K8s Test Job') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-        sh '''
-          kubectl delete job scheduler-test --ignore-not-found --wait=true
-          sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
-          ./scripts/wait_for_job.sh scheduler-tests
-        '''
+          sh '''
+            kubectl delete job scheduler-test --ignore-not-found --wait=true
+            sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
+            ./scripts/wait_for_job.sh scheduler-tests
+          '''
         }
       }
     }
-
 
     stage('Merge dev → main') {
       when {
