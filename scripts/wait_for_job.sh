@@ -3,7 +3,7 @@
 job=$1
 
 echo "📡 Waiting for job '$job' to complete..."
-for i in {1..60}; do
+for i in {1..90}; do
   status=$(kubectl get job "$job" -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}')
   if [[ "$status" == "True" ]]; then
     echo "✅ Job '$job' completed successfully"
