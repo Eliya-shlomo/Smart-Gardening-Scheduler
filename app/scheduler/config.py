@@ -15,6 +15,6 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     class Config:
-        env_file = "shared/.env"
+        env_file = "scheduler/.env"
 
 settings = Settings()
