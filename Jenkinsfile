@@ -14,7 +14,7 @@ pipeline {
           $class: 'GitSCM',
           branches: [[name: '*/dev']],
           userRemoteConfigs: [[
-            url: 'https://github.com/Eliya-shlomo/Smart-Gardening-Scheduler.git'
+            url: 'https://github.com/Eliya-shlomo/Smart-Gardening-Scheduler.git',
             credentialsId: 'git-ssh-key',
             refspec: '+refs/heads/*:refs/remotes/origin/*'
           ]]
