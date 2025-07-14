@@ -85,6 +85,7 @@ pipeline {
             git checkout -B main origin/main
             git pull origin main
             git merge origin/dev --no-edit
+            git remote set-url origin git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git
             git push origin main
           '''
         }
