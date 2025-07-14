@@ -84,7 +84,7 @@ pipeline {
             git fetch origin main
             git checkout -B main origin/main
             git pull origin main
-            git merge dev --no-edit
+            git merge origin/dev --no-edit
             git push origin main
           '''
         }
