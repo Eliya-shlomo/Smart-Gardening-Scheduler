@@ -77,7 +77,7 @@ pipeline {
         expression { return fileExists('job_result.txt') && readFile('job_result.txt').trim() == 'success' }
       }
       steps {
-        sshagent (credentials: ['git-ssh-key']) {
+        sshagent (credentials: ['github-token']) {
           sh '''
             git config --global user.name "jenkins"
             git config --global user.email "jenkins@ci"
@@ -85,7 +85,7 @@ pipeline {
             git checkout -B main origin/main
             git pull origin main
             git merge origin/dev --no-edit
-            git remote set-url origin git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git
+            git remote set-url origin https://github.com/Eliya-shlomo/Smart-Gardening-Scheduler.git
             git push origin main
           '''
         }
