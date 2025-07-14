@@ -11,21 +11,22 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout([
-          $class: 'GitSCM',
-          branches: [[name: '*/dev']],
-          userRemoteConfigs: [[
-            url: 'git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git',
-            credentialsId: 'git-ssh-key',
-            refspec: '+refs/heads/*:refs/remotes/origin/*'
+        $class: 'GitSCM',
+        branches: [[name: '*/dev']],
+        userRemoteConfigs: [[
+          url: 'git@github.com:Eliya-shlomo/Smart-Gardening-Scheduler.git',
+          credentialsId: 'git-ssh-key',
+          refspec: '+refs/heads/*:refs/remotes/origin/*'
           ]]
         ])
       } 
     }
+  }
 
-    stage('Save current latest digest') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh '''
+  stage('Save current latest digest') {
+    steps {
+      withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        sh '''
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             aws configure set region $AWS_REGION
@@ -34,10 +35,10 @@ pipeline {
               --image-ids imageTag=latest \
               --query 'images[0].imageDigest' \
               --output text > latest_digest.txt || echo "none" > latest_digest.txt
-          '''
-        }
+        '''
       }
     }
+  }
 
     stage('Build Docker Image') {
       steps {
@@ -62,14 +63,15 @@ pipeline {
     stage('Run K8s Test Job') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh '''
-            kubectl delete job scheduler-test --ignore-not-found --wait=true
-            sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
-            ./scripts/wait_for_job.sh scheduler-tests
-          '''
+        sh '''
+          kubectl delete job scheduler-test --ignore-not-found --wait=true
+          sed "s|__IMAGE__|$ECR_REPO:$IMAGE_TAG|g" k8s/test-job.yaml | kubectl replace --force -f -
+          ./scripts/wait_for_job.sh scheduler-tests
+        '''
         }
       }
     }
+
 
     stage('Merge dev → main') {
       when {
