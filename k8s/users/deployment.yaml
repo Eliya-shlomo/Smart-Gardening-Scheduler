@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: eliya/users-app:latest  
+          env:
+            - name: DATABASE_URL
+              value: postgresql://user:password@users-postgres:5432/gardening_users
+          ports:
+            - containerPort: 8000

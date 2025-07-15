@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-from app.users.models.refresh_token import RefreshToken
-from app.users.config import settings
+from users.models.refresh_token import RefreshToken
+from users.config import settings
 
 def create_refresh_token(db: Session, token_str: str, user_id: int):
     expires_at = datetime.now() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)

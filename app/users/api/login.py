@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.users.schemas.user import UserLogin
-from app.users.schemas.token import Token
-from app.users.crud.user import authenticate_user
-from app.users.utils.security import create_access_token, create_refresh_token_string
-from app.users.crud.refresh_token import create_refresh_token
-from app.users.database import get_db
-from app.users.utils.audit_logger import send_audit_log
+from users.schemas.user import UserLogin
+from users.schemas.token import Token
+from users.crud.user import authenticate_user
+from users.crud.refresh_token import create_refresh_token
+from users.utils.security import create_access_token, create_refresh_token_string
+from users.utils.audit_logger import send_audit_log
+from users.database import get_db
 
 router = APIRouter()
 

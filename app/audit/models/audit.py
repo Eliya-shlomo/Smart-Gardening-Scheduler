@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.audit.database import Base  
+from audit.database import Base  
 class AuditLog(Base):
     __tablename__ = "audit_logs"
 

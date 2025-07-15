@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError, ExpiredSignatureError
-from backend.config import settings
+from users.config import settings
 import secrets
 import bcrypt
 

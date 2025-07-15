@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from app.users.models.user import User
-from app.users.schemas.user import UserCreate
-from app.utils.security import hash_password, verify_password
+from users.models.user import User
+from users.schemas.user import UserCreate
+from users.utils.security import hash_password, verify_password
 
 ## check if user ix exciting by email
 def get_user_by_email(db: Session, email: str):

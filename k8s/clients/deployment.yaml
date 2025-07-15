@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clients
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clients
+  template:
+    metadata:
+      labels:
+        app: clients
+    spec:
+      containers:
+        - name: clients
+          image: eliya/clients-app:latest  
+          env:
+            - name: DATABASE_URL
+              value: postgresql://user:password@clients-postgres:5432/gardening_clients
+          ports:
+            - containerPort: 8000
