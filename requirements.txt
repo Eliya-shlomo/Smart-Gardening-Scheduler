@@ -16,3 +16,5 @@ bcrypt
 httpx
 pytest
 pytest-asyncio
+axios
+

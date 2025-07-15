@@ -1,13 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { user } = useAuth();
+
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the Home Page!</Text>
+      <Text style={styles.title}>Welcome{user?.name ? `, ${user.name}` : "!"}</Text>
 
       <TouchableOpacity
         style={styles.button}
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    width: "80%",              // כפתור רחב ואחיד
+    width: "80%",              
     paddingVertical: 15,
     borderRadius: 8,
     backgroundColor: "#3498db",

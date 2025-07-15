@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -13,6 +14,10 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "expo-router";
 
+// For it to work you need to put the IP of the computer
+const API_URL = "http://192.168.1.182:8000"
+
+
 export default function RegisterScreen() {
   const { login } = useAuth();
   const router = useRouter();
@@ -22,15 +27,44 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!fullName || !email || !phone || !password) {
       Alert.alert("Please fill out all fields");
       return;
     }
 
-    login(); // אפשר לשלב כאן קריאה לשרת
-    Alert.alert("Registered successfully!");
-    router.push("/home");
+    try {
+      const response = await axios.post(`${API_URL}/users/register`, {
+        name: fullName,
+        email,
+        phone,
+        password,
+      });
+
+      Alert.alert("Registered successfully!");
+
+      login(response.data); 
+      router.push("/home");
+
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage = error.response?.data?.detail;
+      
+        console.log("Axios Error:", error.response?.data);
+      
+        if (typeof serverMessage === "string") {
+          Alert.alert("Registration failed", serverMessage);
+        } else if (Array.isArray(serverMessage)) {
+          const message = serverMessage.map((err: any) => err.msg).join("\n");
+          Alert.alert("Registration failed", message);
+        } else {
+          Alert.alert("Registration failed", "Something went wrong. Please try again.");
+        }
+      } else {
+        console.log("Unknown Error:", error);
+        Alert.alert("Error", "Unexpected error occurred");
+      }
+    }
   };
 
   return (
