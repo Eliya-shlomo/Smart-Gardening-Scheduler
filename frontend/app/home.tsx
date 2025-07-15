@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 
@@ -11,6 +11,12 @@ export default function HomeScreen() {
 
 
   return (
+    <>
+    <Stack.Screen
+        options={{
+          headerLeft: () => <></>, 
+        }}
+      />
     <View style={styles.container}>
       <Text style={styles.title}>Welcome{user?.name ? `, ${user.name}` : "!"}</Text>
 
@@ -28,6 +34,9 @@ export default function HomeScreen() {
         <Text style={styles.buttonText}>Create New Client</Text>
       </TouchableOpacity>
     </View>
+    
+    </>
+    
   );
 }
 

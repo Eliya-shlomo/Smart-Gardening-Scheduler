@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "expo-router";
 
 // For it to work you need to put the IP of the computer
-const API_URL = "http://192.168.1.182:8000"
+import { API_URL } from "../context/config";
 
 
 export default function RegisterScreen() {
@@ -43,7 +43,9 @@ export default function RegisterScreen() {
 
       Alert.alert("Registered successfully!");
 
-      login(response.data); 
+      
+      login(response.data, "");
+
       router.push("/home");
 
     } catch (error: any) {

@@ -34,7 +34,7 @@ export default function StatusIndicator() {
     );
   };
 
-  // האות הראשונה של השם באות גדולה, או ריק אם אין שם
+  // The first letter of the name is capitalized, or blank if there is no name.
   const firstLetter = userName ? userName.charAt(0).toUpperCase() : "";
 
   return (

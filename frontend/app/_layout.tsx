@@ -13,7 +13,7 @@ export default function RootLayout() {
             name="index"
             options={{
               headerBackVisible: false,
-              headerLeft: () => null, 
+              headerLeft: () => <></>, 
             }}
           />
         </Stack>

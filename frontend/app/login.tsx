@@ -11,6 +11,9 @@ import {
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "expo-router";
+import { API_URL } from "../context/config";
+import axios from "axios";
+
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -19,16 +22,47 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email || !password) {
       Alert.alert("Please enter both email and password.");
       return;
     }
+    try {
+      const response = await axios.post(`${API_URL}/users/login`, {
+        email,
+        password,
+      });
 
-    // תוכל להחליף את זה בבדיקת התחברות מול API
-    login();
-    Alert.alert("Signed in successfully!");
-    router.replace("/home");
+      Alert.alert("Login successfully!");
+      const token = response.data.access_token;
+      const userRes = await axios.get(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+
+
+      login(userRes.data, token);
+      router.push("/home");
+
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage = error.response?.data?.detail;
+      
+        console.log("Axios Error:", error.response?.data);
+      
+        if (typeof serverMessage === "string") {
+          Alert.alert("login failed", serverMessage);
+        } else if (Array.isArray(serverMessage)) {
+          const message = serverMessage.map((err: any) => err.msg).join("\n");
+          Alert.alert("login failed", message);
+        } else {
+          Alert.alert("login failed", "Something went wrong. Please try again.");
+        }
+      } else {
+        console.log("Unknown Error:", error);
+        Alert.alert("Error", "Unexpected error occurred");
+      }
+    }
   };
 
   return (
