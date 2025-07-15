@@ -1,14 +1,12 @@
 from fastapi import FastAPI
-from app.users.api.login import router as login_router
-from app.users.api.register import router as register_router
-from app.users.api.refresh import router as refresh_router
-from app.users.api.logout import router as logout_router
-from app.users.api.user import router as user_router
+from app.users.api import user as user_router     
+from app.users.api import token as token_router    
 
 app = FastAPI()
-app.include_router(login_router)
-app.include_router(register_router)
-app.include_router(refresh_router)
-app.include_router(logout_router)
-app.include_router(user_router)
 
+app.include_router(user_router.router, prefix="/users", tags=["Users"])
+app.include_router(token_router.router, prefix="/users", tags=["Tokens"])
+
+@app.get("/health", tags=["Health"])
+def health():
+    return {"status": "ok"}

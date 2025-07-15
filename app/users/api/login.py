@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from app.users.schemas.user import UserLogin
 from app.users.schemas.token import Token
 from app.users.crud.user import authenticate_user
-from app.utils.security import create_access_token, create_refresh_token_string
+from app.users.utils.security import create_access_token, create_refresh_token_string
 from app.users.crud.refresh_token import create_refresh_token
 from app.users.database import get_db
-from app.crud.audit_log import create_log
+from app.users.utils.audit_logger import send_audit_log
 
 router = APIRouter()
 
@@ -24,8 +24,7 @@ def login(login_data: UserLogin, db: Session = Depends(get_db)):
     create_refresh_token(db, refresh_token_str, user.id)
 
     # Audit Log for login
-    create_log(
-        db=db,
+    send_audit_log(
         user_id=user.id,
         action="login",
         entity_type="User",

@@ -2,6 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.users.config import settings
 import os
+from sqlalchemy.orm import declarative_base
+
+## this line go to the model folder and Loading all files 
+Base = declarative_base()
 
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 

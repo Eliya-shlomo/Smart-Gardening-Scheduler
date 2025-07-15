@@ -10,7 +10,6 @@ from app.users.api.deps import get_current_user
 from app.utils.security import create_access_token, create_refresh_token_string
 from app.crud.refresh_token import create_refresh_token, get_valid_refresh_token,revoke_refresh_token
 from app.users.models import user
-from app.crud.audit_log import create_log
 
 
 router = APIRouter()

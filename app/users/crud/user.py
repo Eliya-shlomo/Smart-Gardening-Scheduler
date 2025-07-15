@@ -1,15 +1,15 @@
 from sqlalchemy.orm import Session
-from backend import models
-from backend.schemas.user import UserCreate
-from backend.utils.security import hash_password, verify_password
+from app.users.models.user import User
+from app.users.schemas.user import UserCreate
+from app.utils.security import hash_password, verify_password
 
 ## check if user ix exciting by email
 def get_user_by_email(db: Session, email: str):
-    return db.query(models.User).filter(models.User.email == email).first()
+    return db.query(User).filter(User.email == email).first()
 
 def create_user(db: Session, user: UserCreate):
     hashed_pw = hash_password(user.password)
-    db_user = models.User(
+    db_user = User(
         name=user.name,
         email=user.email,
         phone=user.phone,

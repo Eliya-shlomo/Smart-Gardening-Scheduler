@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi import Body
 from app.users.schemas.user import UserCreate, UserLogin, UserResponse, Token
 from app.users.database import get_db
-from app.users.crud import get_user_by_email,create_user, authenticate_user
+from app.users.crud.user import get_user_by_email,create_user, authenticate_user
 from app.utils.security import create_access_token
 from app.users.api.deps import get_current_user
 from app.utils.security import create_access_token, create_refresh_token_string

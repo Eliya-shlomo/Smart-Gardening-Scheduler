@@ -2,11 +2,11 @@ import httpx
 from fastapi import Request, Response
 
 SERVICE_URLS = {
-    "users": "http://localhost:8001",
-    "clients": "http://localhost:8002",
-    "scheduler": "http://localhost:8003",
-    "inventory": "http://localhost:8004",
-    "audit": "http://localhost:8005",
+    "users":     "http://users-service",     
+    "clients":   "http://clients-service",
+    "scheduler": "http://scheduler-service",
+    "inventory": "http://inventory-service",
+    "audit":     "http://audit-service",
 }
 
 
