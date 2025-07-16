@@ -5,7 +5,7 @@ from users.schemas.token import Token
 from users.crud.user import authenticate_user
 from users.crud.refresh_token import create_refresh_token
 from users.utils.security import create_access_token, create_refresh_token_string
-from users.utils.audit_logger import send_audit_log
+from users.utils.audit_logger import send_log
 from users.database import get_db
 
 router = APIRouter()
@@ -24,7 +24,7 @@ def login(login_data: UserLogin, db: Session = Depends(get_db)):
     create_refresh_token(db, refresh_token_str, user.id)
 
     # Audit Log for login
-    send_audit_log(
+    send_log(
         user_id=user.id,
         action="login",
         entity_type="User",

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alembic-migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: alembic
+        image: clients-app:latest
+        command: ["alembic", "upgrade", "head"]
+        env:
+        - name: POSTGRES_DB
+          value: gardening_users
+        - name: POSTGRES_USER
+          value: user
+        - name: POSTGRES_PASSWORD
+          value: password
+      restartPolicy: Never
+  backoffLimit: 3

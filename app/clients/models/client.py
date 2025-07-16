@@ -11,7 +11,7 @@ class Client(Base):
     email = Column(String, nullable=False)
     address = Column(String)
     phone = Column(String)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, nullable=False)  
     created_at = Column(DateTime, default=datetime.now())  
 
 

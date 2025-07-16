@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: eliya/users-app:latest  
+          image: eliyashlomo7/users-app:latest  
           env:
             - name: DATABASE_URL
               value: postgresql://user:password@users-postgres:5432/gardening_users

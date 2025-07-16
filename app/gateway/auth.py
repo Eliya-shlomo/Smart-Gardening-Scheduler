@@ -1,5 +1,5 @@
 from fastapi import Request, HTTPException, status, Depends
-from shared.jwt_utils import decode_access_token
+from gateway.shared.jwt_utils import decode_access_token
 
 def verify_jwt_token(request: Request):
     """

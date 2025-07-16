@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  postgres_users:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_users
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5433:5432"
+    networks:
+      - gardening
+
+  postgres_clients:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_clients
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5434:5432"
+    networks:
+      - gardening
+
+  postgres_audit:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_audit
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5435:5432"
+    networks:
+      - gardening
+
+networks:
+  gardening:
+    driver: bridge

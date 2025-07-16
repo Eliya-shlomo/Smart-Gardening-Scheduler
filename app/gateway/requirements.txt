@@ -4,3 +4,4 @@ httpx
 python-jose  
 pydantic
 pytest
+bcrypt

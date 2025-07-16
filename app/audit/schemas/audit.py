@@ -4,6 +4,7 @@ from datetime import datetime
 
 class AuditLogResponse(BaseModel):
     id: int
+    user_id: int   
     action: str
     entity_type: str
     entity_id: Optional[int]
@@ -11,4 +12,13 @@ class AuditLogResponse(BaseModel):
     timestamp: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True  
+
+
+
+class AuditLogCreate(BaseModel):
+    user_id: int
+    action: str
+    entity_type: str
+    entity_id: Optional[int] = None
+    details: Optional[str] = None

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from users.crud.refresh_token import get_valid_refresh_token, revoke_refresh_token
 from users.utils.deps import get_current_user
 from users.database import get_db
-from users.utils.audit_logger import send_audit_log
+from users.utils.audit_logger import send_log
 from users.models.user import User
 
 router = APIRouter()
@@ -21,8 +21,8 @@ def logout(
     revoke_refresh_token(db, refresh_token)
 
     # Audit Log for login
-    send_audit_log(
-        user_id=user.id,
+    send_log(
+        user_id=User.id,
         action="login",
         entity_type="User",
         details=f"User {user.email} logged in"

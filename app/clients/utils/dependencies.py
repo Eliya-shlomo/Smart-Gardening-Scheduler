@@ -1,10 +1,12 @@
 import os
 import requests
 from fastapi import Depends, HTTPException, status, Header
+from typing import Optional
 
-USERS_URL = "http://users-service/me"
 
-def get_current_user(authorization: str = Header(...)):
+USERS_URL = "http://localhost:8001/users/me"  
+
+def get_current_user(authorization: Optional[str] = Header(None)):
     try:
         headers = {"Authorization": authorization}
         resp = requests.get(USERS_URL, headers=headers, timeout=3)

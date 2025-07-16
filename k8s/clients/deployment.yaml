@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: clients
-          image: eliya/clients-app:latest  
+          image: eliyashlomo7/clients-app:latest  
           env:
             - name: DATABASE_URL
               value: postgresql://user:password@clients-postgres:5432/gardening_clients

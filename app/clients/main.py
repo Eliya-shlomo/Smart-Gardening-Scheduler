@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from clients.api.clients import router as client_router     
+from clients.database import Base, engine
 
 
-
+Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()

@@ -10,7 +10,7 @@ from users.utils.deps import get_current_user
 from users.utils.security import create_access_token, create_refresh_token_string
 from users.crud.refresh_token import create_refresh_token, get_valid_refresh_token,revoke_refresh_token
 from users.models import User
-
+from users.utils.audit_logger import send_log
 
 router = APIRouter()
 
@@ -33,7 +33,16 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
             detail=f"Could not create user: {str(e)}"
         )
 
+    send_log(
+        user_id=new_user.id,
+        action="register",
+        entity_type="User",
+        entity_id=new_user.id,
+        details=f"User {new_user.email} registered"
+    )
+
     return new_user
+
 
 
 

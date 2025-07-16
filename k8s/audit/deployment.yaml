@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: audit
-          image: eliya/audit-app:latest  
+          image: eliyashlomo7/audit-app:latest  
           env:
             - name: DATABASE_URL
               value: postgresql://user:password@audit-postgres:5432/gardening_audit

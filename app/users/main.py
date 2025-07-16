@@ -4,9 +4,9 @@ from users.api.register import router as user_register
 from users.api.logout import router as user_logout
 from users.api.user import router as user_me
 from users.api.refresh import router as token_refresh
+from users.database import Base, engine 
 
-
-
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

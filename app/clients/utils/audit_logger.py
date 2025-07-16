@@ -1,6 +1,6 @@
 import requests
 
-AUDIT_URL = "http://audit-service"
+AUDIT_URL = "http://localhost:8003/audit_log/"
 
 def send_log(
     user_id: int,
