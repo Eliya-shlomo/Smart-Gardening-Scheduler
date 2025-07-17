@@ -36,6 +36,42 @@ services:
     networks:
       - gardening
 
+
+  postgres_inventory:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_inventory
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5436:5432"
+    networks:
+      - gardening
+
+  postgres_notification:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_notification
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5437:5432"
+    networks:
+      - gardening
+
+  postgres_appointments:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: gardening_appointments
+      POSTGRES_USER: gardening
+      POSTGRES_PASSWORD: gardening
+    ports:
+      - "5438:5432"
+    networks:
+      - gardening
 networks:
   gardening:
     driver: bridge

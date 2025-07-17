@@ -2,6 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from clients.database import Base
+from sqlalchemy.sql import func
 
 class Client(Base):
     __tablename__ = "clients"
@@ -12,7 +13,7 @@ class Client(Base):
     address = Column(String)
     phone = Column(String)
     user_id = Column(Integer, nullable=False)  
-    created_at = Column(DateTime, default=datetime.now())  
+    created_at = Column(DateTime, server_default=func.now())
 
 
  

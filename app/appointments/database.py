@@ -1,7 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.users.config import settings
+from audit.config import settings
 import os
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 

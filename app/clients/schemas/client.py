@@ -19,6 +19,7 @@ class ClientUpdate(ClientBase):
 
 class ClientResponse(ClientBase):
     id: int
+    user_id: int          
 
     class Config:
         orm_mode = True

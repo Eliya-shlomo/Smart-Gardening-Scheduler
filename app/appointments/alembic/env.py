@@ -4,8 +4,12 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from notification.database import Base  
-from scheduler.models.scheduler import Scheduler 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from appointments.database import Base  
+from appointments.models.appointments import AppointmentStatus, Appointment
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
