@@ -2,7 +2,7 @@ from typing_extensions import Annotated
 from pydantic import BaseModel, EmailStr , StringConstraints
 from typing import Optional
 
-hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _-]{3,100}$'
+hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _\-!@#$%^&*()+=.]{3,100}$'
 
 ## Annotated option is given to restrict the way data is enter db
 class ClientBase(BaseModel):

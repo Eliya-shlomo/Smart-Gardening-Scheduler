@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship, declarative_base
-from clients.database import Base
+from inventory.database import Base
 
 class Tree(Base):
     __tablename__ = "trees"

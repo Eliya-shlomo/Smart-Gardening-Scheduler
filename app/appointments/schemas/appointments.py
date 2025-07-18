@@ -4,7 +4,7 @@ from typing import Optional
 from datetime import datetime
 from typing_extensions import Annotated
 
-hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _-]{3,100}$'
+hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _\-!@#$%^&*()+=.]{3,100}$'
 
 class AppointmentStatus(str, Enum):
     pending = "pending"

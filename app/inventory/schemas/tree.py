@@ -4,12 +4,11 @@ from typing_extensions import Annotated
 from pydantic import BaseModel, StringConstraints
 from typing import Optional
 
-hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _-]{3,100}$'
+hebrew_and_english_pattern = r'^[\u0590-\u05FFa-zA-Z0-9 _\-!@#$%^&*()+=.]{3,100}$'
 
-## Annotated option is given to restrict the way data is enter db
 class TreeBase(BaseModel):
     type: Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)] 
-    planting_date: Optional[datetime] = None
+    planting_date: datetime
     notes: Optional[Annotated[str,StringConstraints(pattern=hebrew_and_english_pattern)] ] = None
 
 class TreeCreate(TreeBase):

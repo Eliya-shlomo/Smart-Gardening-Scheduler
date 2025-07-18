@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from audit.config import settings
+from appointments.config import settings
 import os
 from sqlalchemy.orm import declarative_base
 
