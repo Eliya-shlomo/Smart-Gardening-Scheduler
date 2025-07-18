@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
-from backend.database import Base
+from notification.database import Base
 
 class Recommendation(Base):
     __tablename__ = "recommendations"
