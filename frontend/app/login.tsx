@@ -39,8 +39,6 @@ export default function LoginScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      // ✔️ הצליח? עכשיו נציג הודעת הצלחה
-      Alert.alert("Login successfully!");
   
       login(userRes.data, token);
       router.push("/home");

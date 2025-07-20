@@ -23,6 +23,11 @@ export default function ClientDetailsScreen() {
 
   useEffect(() => {
     const fetchClient = async () => {
+      if (!token) {
+        setLoading(false);
+        setClient(null);
+        return;
+      }
       try {
         const res = await axios.get(`${BASE_URL_CLIENTS}/clients/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
