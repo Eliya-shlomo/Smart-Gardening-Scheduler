@@ -14,8 +14,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "expo-router";
 
-// For it to work you need to put the IP of the computer
-import { API_URL } from "../context/config";
+import { BASE_URL_USERS } from "../context/config";
 
 
 export default function RegisterScreen() {
@@ -34,7 +33,7 @@ export default function RegisterScreen() {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/users/register`, {
+      const response = await axios.post(`${BASE_URL_USERS}/users/register`, {
         name: fullName,
         email,
         phone,

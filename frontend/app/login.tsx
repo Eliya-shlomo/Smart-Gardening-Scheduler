@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "expo-router";
-import { API_URL } from "../context/config";
+import { BASE_URL_USERS } from "../context/config";
 import axios from "axios";
 
 
@@ -28,28 +28,28 @@ export default function LoginScreen() {
       return;
     }
     try {
-      const response = await axios.post(`${API_URL}/users/login`, {
+      const response = await axios.post(`${BASE_URL_USERS}/users/login`, {
         email,
         password,
       });
-
-      Alert.alert("Login successfully!");
+  
       const token = response.data.access_token;
-      const userRes = await axios.get(`${API_URL}/users/me`, {
+  
+      const userRes = await axios.get(`${BASE_URL_USERS}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
-
-
+  
+      // ✔️ הצליח? עכשיו נציג הודעת הצלחה
+      Alert.alert("Login successfully!");
+  
       login(userRes.data, token);
       router.push("/home");
-
+  
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         const serverMessage = error.response?.data?.detail;
-      
         console.log("Axios Error:", error.response?.data);
-      
+  
         if (typeof serverMessage === "string") {
           Alert.alert("login failed", serverMessage);
         } else if (Array.isArray(serverMessage)) {
@@ -64,6 +64,7 @@ export default function LoginScreen() {
       }
     }
   };
+  
 
   return (
     <KeyboardAvoidingView
