@@ -38,7 +38,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await AsyncStorage.removeItem("token");
   };
 
-  // נטען את המשתמש והטוקן מה-storage כשהאפליקציה נפתחת
   useEffect(() => {
     const loadFromStorage = async () => {
       const savedToken = await AsyncStorage.getItem("token");
