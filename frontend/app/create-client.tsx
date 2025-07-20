@@ -8,7 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -63,8 +63,11 @@ export default function CreateClientScreen() {
   };
 
   return (
+    <>
+    <Stack.Screen options={{ title: "Create Client" }} />
+
     <View style={styles.container}>
-      <Text style={styles.title}>Create a new customer</Text>
+      <Text style={styles.title}>Create a new Client</Text>
 
       <TextInput
         placeholder="Full name"
@@ -109,6 +112,8 @@ export default function CreateClientScreen() {
         )}
       </TouchableOpacity>
     </View>
+    </>
+    
   );
 }
 

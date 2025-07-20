@@ -9,12 +9,20 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/");  
+      const timeout = setTimeout(() => {
+        router.replace("/");
+      }, 2000); 
+  
+      return () => clearTimeout(timeout); 
     }
   }, [token]);
 
   if (!token) {
-    return null;
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Checking authentication...</Text>
+      </View>
+    );
   }
 
   return (
@@ -75,4 +83,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });

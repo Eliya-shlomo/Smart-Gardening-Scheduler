@@ -12,7 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 import { BASE_URL_USERS } from "../context/config";
 
@@ -40,12 +40,10 @@ export default function RegisterScreen() {
         password,
       });
 
-      Alert.alert("Registered successfully!");
 
       
-      login(response.data, "");
+      router.push({ pathname: "/login", params: { email } });
 
-      router.push("/home");
 
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
@@ -69,7 +67,9 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
+    <>
+          <Stack.Screen options={{ title: "Register" }} />
+          <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
     >
@@ -117,6 +117,9 @@ export default function RegisterScreen() {
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
+
+    </>
+    
   );
 }
 

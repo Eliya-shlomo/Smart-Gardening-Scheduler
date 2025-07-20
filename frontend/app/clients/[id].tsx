@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { BASE_URL_CLIENTS } from "../../context/config";
@@ -65,6 +65,9 @@ export default function ClientDetailsScreen() {
   }
 
   return (
+    <>
+      <Stack.Screen options={{ title: `Client: ${client.name}` }} />
+
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.clientInfo}>
         <Text style={styles.title}>{client.name}</Text>
@@ -89,6 +92,8 @@ export default function ClientDetailsScreen() {
         <Text style={styles.buttonText}>Add New Tree</Text>
       </TouchableOpacity>
     </ScrollView>
+    </>
+    
   );
 }
 
