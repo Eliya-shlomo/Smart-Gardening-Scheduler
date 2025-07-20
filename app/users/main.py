@@ -5,7 +5,10 @@ from users.api.logout import router as user_logout
 from users.api.user import router as user_me
 from users.api.refresh import router as token_refresh
 from users.database import Base, engine 
+import redis.asyncio as redis
 
+
+redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()

@@ -61,11 +61,11 @@ services:
     networks:
       - gardening
 
-  postgres_appointments:
+  postgres_scheduler:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_DB: gardening_appointments
+      POSTGRES_DB: gardening_scheduler
       POSTGRES_USER: gardening
       POSTGRES_PASSWORD: gardening
     ports:

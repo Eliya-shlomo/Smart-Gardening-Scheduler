@@ -1,32 +1,38 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from appointments.database import get_db
-from appointments.utils.get_current_user import get_current_user
-from appointments.models.appointments import AppointmentStatus, Appointment
-from appointments.schemas.appointments import AppointmentCreate, AppointmentUpdate, AppointmentResponse
-from appointments.crud.appointments import update_appointment_status, get_appointment_by_id,get_appointments_for_client ,create_appointment
-from appointments.utils.audit_logger import send_log
-from appointments.utils.appointments_services import verify_client_ownership, get_token
+from scheduler.database import get_db
+from scheduler.schemas.appointment import AppointmentCreate, AppointmentUpdate, AppointmentResponse
+from scheduler.utils.deps import get_current_user
+from backend.models import User, Appointment, Client
+from backend.crud.appointment import (
+    create_appointment,
+    get_appointments_for_client,
+    get_appointment_by_id,
+    update_appointment_status
+)
+from backend.crud.audit_log import create_log
 
-
-
-router = APIRouter(tags=["Appointments"])
+router = APIRouter(prefix="/appointments", tags=["Appointments"])
 
 
 @router.post("/", response_model=AppointmentResponse)
-async def create_appointment_view(
+def create_appointment_view(
     appointment_in: AppointmentCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    token: str = Depends(get_token)  
+    current_user: User = Depends(get_current_user)
 ):
-    if not await verify_client_ownership(appointment_in.client_id, current_user["id"], token):
+    client = db.query(Client).filter(
+        Client.id == appointment_in.client_id,
+        Client.user_id == current_user.id
+    ).first()
+    if not client:
         raise HTTPException(status_code=403, detail="Access denied to this client")
 
     appointment = create_appointment(db, appointment_in)
 
-    send_log(
-        user_id=current_user["id"], 
+    create_log(
+        db=db,
+        user_id=current_user.id,
         action="create",
         entity_type="Appointment",
         entity_id=appointment.id,
@@ -37,43 +43,40 @@ async def create_appointment_view(
 
 
 @router.get("/client/{client_id}", response_model=list[AppointmentResponse])
-async def get_appointments_for_client_view(
+def get_appointments_for_client_view(
     client_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    request: Request = None,
-    token: str = Depends(get_token)  
-
+    current_user: User = Depends(get_current_user)
 ):
-    # token = request.headers.get("Authorization", "")
-    if not await verify_client_ownership(client_id, current_user["id"], token):
+    client = db.query(Client).filter(
+        Client.id == client_id,
+        Client.user_id == current_user.id
+    ).first()
+    if not client:
         raise HTTPException(status_code=403, detail="Access denied to this client")
 
     return get_appointments_for_client(db, client_id)
 
 
-
 @router.patch("/{appointment_id}", response_model=AppointmentResponse)
-async def mark_appointment_done_view(
+def mark_appointment_done_view(
     appointment_id: int,
     update_data: AppointmentUpdate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    request: Request = None,
-    token: str = Depends(get_token)  
+    current_user: User = Depends(get_current_user)
 ):
     appointment = get_appointment_by_id(db, appointment_id)
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
 
-    # token = request.headers.get("Authorization", "")
-    if not await verify_client_ownership(appointment.client_id, current_user["id"], token):
+    if appointment.client.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Access denied to this appointment")
 
     updated = update_appointment_status(db, appointment_id, update_data)
 
-    send_log(
-        user_id=current_user["id"],
+    create_log(
+        db=db,
+        user_id=current_user.id,
         action="update",
         entity_type="Appointment",
         entity_id=appointment.id,
@@ -84,33 +87,25 @@ async def mark_appointment_done_view(
 
 
 @router.put("/{appointment_id}", response_model=AppointmentResponse)
-async def update_appointment_view(
+def update_appointment(
     appointment_id: int,
     appointment_in: AppointmentCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    request: Request = None,
-    token: str = Depends(get_token)  
+    current_user: User = Depends(get_current_user)
 ):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
-    if not appointment:
-        raise HTTPException(status_code=404, detail="Appointment not found")
-
-    # token = request.headers.get("Authorization", "")
-    if not await verify_client_ownership(appointment.client_id, current_user["id"], token):
+    if not appointment or appointment.client.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Unauthorized")
 
     appointment.date = appointment_in.date
-    appointment.time = appointment_in.time
     appointment.status = appointment_in.status
     appointment.notes = appointment_in.notes
-    appointment.treatment_type = appointment_in.treatment_type
-    
     db.commit()
     db.refresh(appointment)
 
-    send_log(
-        user_id=current_user["id"],
+    create_log(
+        db=db,
+        user_id=current_user.id,
         action="update",
         entity_type="Appointment",
         entity_id=appointment.id,
@@ -120,30 +115,23 @@ async def update_appointment_view(
     return appointment
 
 
-
 @router.delete("/{appointment_id}")
-async def delete_appointment_view(
+def delete_appointment(
     appointment_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-    request: Request = None,
-    token: str = Depends(get_token)  
-
+    current_user: User = Depends(get_current_user)
 ):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
-    if not appointment:
-        raise HTTPException(status_code=404, detail="Appointment not found")
-
-    # token = request.headers.get("Authorization", "")
-    if not await verify_client_ownership(appointment.client_id, current_user["id"], token):
+    if not appointment or appointment.client.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Unauthorized")
 
     log_details = f"Deleted appointment on {appointment.date} for client_id={appointment.client_id}"
 
     db.delete(appointment)
 
-    send_log(
-        user_id=current_user["id"],
+    create_log(
+        db=db,
+        user_id=current_user.id,
         action="delete",
         entity_type="Appointment",
         entity_id=appointment_id,
