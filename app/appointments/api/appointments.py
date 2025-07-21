@@ -10,7 +10,7 @@ from appointments.utils.appointments_services import verify_client_ownership, ge
 
 
 
-router = APIRouter(tags=["Appointments"])
+router = APIRouter()
 
 
 @router.post("/", response_model=AppointmentResponse)

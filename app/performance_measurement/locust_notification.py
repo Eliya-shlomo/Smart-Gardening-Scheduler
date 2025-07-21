@@ -42,7 +42,6 @@ class RecommendationApiUser(HttpUser):
         self.tree_id = None
         self.recommendations = []
 
-        # יצירת user
         users_host = "http://localhost:8001"
         r = self.client.post(
             f"{users_host}/users/register",
@@ -78,7 +77,7 @@ class RecommendationApiUser(HttpUser):
         if r.status_code == 200:
             self.client_id = r.json()["id"]
 
-        trees_host = "http://localhost:8005"
+        trees_host = "http://localhost:8005/inventory"
         r = self.client.post(
             f"{trees_host}/trees/",
             json={

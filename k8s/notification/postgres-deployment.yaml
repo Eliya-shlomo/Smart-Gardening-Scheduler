@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: clients-postgres
+  name: notification-postgres
 spec:
   selector:
     matchLabels:
-      app: clients-postgres
+      app: notification-postgres
   replicas: 1
   template:
     metadata:
       labels:
-        app: clients-postgres
+        app: notification-postgres
     spec:
       containers:
         - name: postgres
           image: postgres:15
           env:
             - name: POSTGRES_DB
-              value: gardening_clients
+              value: gardening_notification
             - name: POSTGRES_USER
               value: user
             - name: POSTGRES_PASSWORD

@@ -7,7 +7,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(appointments, prefix="/appointments", tags=["Audit_Log"])
+app.include_router(appointments, prefix="/appointments", tags=["appointments"])
 
 
 

@@ -1,0 +1,96 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: users-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: users
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: clients-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: clients
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: audit-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: audit
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: appointments-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: appointments
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: inventory-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: inventory
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: notification-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: notification
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+---

@@ -37,7 +37,7 @@ def future_datetime(days=1):
     return (now + timedelta(days=random.randint(1, days+3))).strftime("%Y-%m-%dT%H:%M:%S")
 
 class AppointmentsApiUser(HttpUser):
-    host = "http://localhost:8004"  
+    host = "http://localhost:8006" 
     wait_time = between(1, 2)
 
     def on_start(self):
@@ -101,7 +101,7 @@ class AppointmentsApiUser(HttpUser):
             print("Missing token or client_id in create_appointment")
             return
         with self.client.post(
-            "/appointments/",
+            "/appointments",
             json={
                 "client_id": self.client_id,
                 "date": future_datetime(5),

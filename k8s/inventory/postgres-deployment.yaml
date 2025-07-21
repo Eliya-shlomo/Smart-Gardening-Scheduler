@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: clients-postgres
+  name: inventory-postgres
 spec:
   selector:
     matchLabels:
-      app: clients-postgres
+      app: inventory-postgres
   replicas: 1
   template:
     metadata:
       labels:
-        app: clients-postgres
+        app: inventory-postgres
     spec:
       containers:
         - name: postgres
           image: postgres:15
           env:
             - name: POSTGRES_DB
-              value: gardening_clients
+              value: gardening_inventory
             - name: POSTGRES_USER
               value: user
             - name: POSTGRES_PASSWORD
