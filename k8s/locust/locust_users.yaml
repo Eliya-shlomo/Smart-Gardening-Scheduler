@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-users
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-users
+  template:
+    metadata:
+      labels:
+        app: locust-users
+    spec:
+      containers:
+        - name: locust-users
+          image: eliyashlomo7/locust-users:latest   
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8089
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-users
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+    - port: 8089
+      targetPort: 8089
+      nodePort: 30091           
+  selector:
+    app: locust-users

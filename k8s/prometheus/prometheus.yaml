@@ -4,7 +4,7 @@ kind: ServiceMonitor
 metadata:
   name: users-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -20,7 +20,7 @@ kind: ServiceMonitor
 metadata:
   name: clients-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -36,7 +36,7 @@ kind: ServiceMonitor
 metadata:
   name: audit-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -52,7 +52,7 @@ kind: ServiceMonitor
 metadata:
   name: appointments-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -68,7 +68,7 @@ kind: ServiceMonitor
 metadata:
   name: inventory-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:
@@ -84,7 +84,7 @@ kind: ServiceMonitor
 metadata:
   name: notification-monitor
   labels:
-    release: prometheus
+    release: monitoring
 spec:
   selector:
     matchLabels:

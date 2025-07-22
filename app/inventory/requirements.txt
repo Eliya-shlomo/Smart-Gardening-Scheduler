@@ -17,4 +17,5 @@ httpx
 pytest
 pytest-asyncio
 axios
-
+redis[async]
+prometheus_client
