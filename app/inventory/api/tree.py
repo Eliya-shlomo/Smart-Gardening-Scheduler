@@ -15,14 +15,17 @@ async def verify_client_access(client_id: int, request: Request):
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         raise HTTPException(status_code=401, detail="Missing Authorization header")
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(
-            f"{CLIENT_SERVICE_URL}/clients/{client_id}/access",
-            headers={"Authorization": auth_header},
-            timeout=5
-        )
-        if resp.status_code != 200:
-            raise HTTPException(status_code=403, detail="No access to this client")
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
+                f"{CLIENT_SERVICE_URL}/clients/{client_id}/access",
+                headers={"Authorization": auth_header},
+                timeout=5
+            )
+            if resp.status_code != 200:
+                raise HTTPException(status_code=403, detail="No access to this client")
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=503, detail=f"Client service unavailable: {exc}")
 
 router = APIRouter(prefix="/trees", tags=["Trees"])
 

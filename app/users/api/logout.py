@@ -20,12 +20,12 @@ def logout(
 
     revoke_refresh_token(db, refresh_token)
 
-    # Audit Log for login
+    # Audit Log for **logout**
     send_log(
-        user_id=User.id,
-        action="login",
+        user_id=current_user.id,  
+        action="logout",          
         entity_type="User",
-        details=f"User {user.email} logged in"
+        details=f"User {current_user.email} logged out"   
     )
 
     return {"detail": "Logged out successfully"}

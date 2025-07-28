@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+        - name: inventory
+          image: eliyashlomo7/inventory-app:latest
+          env:
+            - name: DATABASE_URL
+              value: postgresql://user:password@inventory-postgres:5432/gardening_inventory
+            - name: MAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: MAIL_FROM
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: POSTGRES_PASSWORD
+            - name: SMTP_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_SERVER
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: POSTGRES_DB
+            - name: SMTP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: gardening-config
+                  key: SMTP_PORT
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: SMTP_USERNAME
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gardening-secret
+                  key: SMTP_PASSWORD
+          ports:
+            - containerPort: 8000

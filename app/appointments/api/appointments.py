@@ -6,11 +6,11 @@ from appointments.models.appointments import AppointmentStatus, Appointment
 from appointments.schemas.appointments import AppointmentCreate, AppointmentUpdate, AppointmentResponse
 from appointments.crud.appointments import update_appointment_status, get_appointment_by_id,get_appointments_for_client ,create_appointment
 from appointments.utils.audit_logger import send_log
-from appointments.utils.appoinments_services import verify_client_ownership, get_token
+from appointments.utils.appointments_services import verify_client_ownership, get_token
 
 
 
-router = APIRouter(tags=["Appointments"])
+router = APIRouter()
 
 
 @router.post("/", response_model=AppointmentResponse)
