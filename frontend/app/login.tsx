@@ -10,16 +10,20 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { BASE_URL_USERS } from "../context/config";
 import axios from "axios";
+import { useLocalSearchParams } from "expo-router";
+
 
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+
+  const params = useLocalSearchParams();
+  const [email, setEmail] = useState((params.email as string) || "");
   const [password, setPassword] = useState("");
 
   const handleSignIn = async () => {
@@ -65,7 +69,10 @@ export default function LoginScreen() {
   
 
   return (
-    <KeyboardAvoidingView
+    <>
+      <Stack.Screen options={{ title: "Sign In" }} />
+      
+      <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
@@ -96,6 +103,9 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
+
+    </>
+    
   );
 }
 

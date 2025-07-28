@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { BASE_URL_CLIENTS } from "../../context/config";
+import { BASE_URL_CLIENTS } from "../../../context/config";
 
 type Client = {
   id: number;
@@ -43,10 +43,23 @@ export default function ClientDetailsScreen() {
     fetchClient();
   }, [id, token]);
 
-  const handleViewMeetings = () => router.push(`/clients/${id}/meetings`);
-  const handleCreateMeeting = () => router.push(`/clients/${id}/create-meeting`);
-  const handleViewTrees = () => router.push(`/clients/${id}/trees`);
-  const handleCreateTree = () => router.push(`/clients/${id}/create-tree`);
+  const handleViewMeetings = () => {
+    const encodedName = encodeURIComponent(client?.name || "");
+    router.push(`/clients/${id}/appointments?name=${encodedName}`);
+  };
+
+  const handleCreateMeeting = () => {
+    const encodedName = encodeURIComponent(client?.name || "");
+    router.push(`/clients/${id}/create-meeting?name=${encodedName}`);
+  };
+  const handleViewTrees = () => {
+    const encodedName = encodeURIComponent(client?.name || "");
+    router.push(`/clients/${id}/trees?name=${encodedName}`);
+  };
+  const handleCreateTree = () =>{
+    const encodedName = encodeURIComponent(client?.name || "");
+    router.push(`/clients/${id}/create-tree?name=${encodedName}`);
+  } 
 
   if (loading) {
     return (
