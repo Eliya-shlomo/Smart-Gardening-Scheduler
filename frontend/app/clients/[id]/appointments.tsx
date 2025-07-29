@@ -109,10 +109,16 @@ export default function AppointmentsScreen() {
           contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
+      <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.addButtonFixed} onPress={handleAddMeeting}>
+          <Text style={styles.addButtonText}>+ Add New Meeting</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.addButtonFixed} onPress={handleAddMeeting}>
-        <Text style={styles.addButtonText}>+ Add New Meeting</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.addButtonFixed} onPress={handleAddMeeting}>
+          <Text style={styles.addButtonText}>- Delete Meeting</Text>
+        </TouchableOpacity>
+      </View>
+      
     </SafeAreaView>
     </>
     
@@ -164,20 +170,28 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButtonFixed: {
-    position: "absolute",
     bottom: 25,
-    left: 20,
-    right: 20,
     backgroundColor: "#27ae60",
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: "center",
     elevation: 5,
+    width: "50%",
   },
   addButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "700",
+  },
+  buttonRow:{
+    position: "absolute",
+  bottom: 25,
+  left: 20,
+  right: 20,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 15,
   },
 });
 
