@@ -4,3 +4,4 @@ __pycache__/
 /k8s/gardening-secret.yaml
 /k8s/gardening-config.yaml
 /k8s/ecr-secret.yaml
+frontend/context/config.ts

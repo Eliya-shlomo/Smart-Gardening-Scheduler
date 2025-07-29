@@ -105,6 +105,16 @@ export default function ClientsScreen() {
           contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
+      {clients.length === 0 ? (
+      <View style={styles.singleButtonWrapper}>
+        <TouchableOpacity
+          style={[styles.addButtonFixed, { width: "100%" }]}
+          onPress={() => router.push("/create-client")}
+        >
+          <Text style={styles.addButtonText}>+ Add New Client</Text>
+        </TouchableOpacity>
+      </View>
+    ) : (
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={styles.addButtonFixed}
@@ -114,11 +124,13 @@ export default function ClientsScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.addButtonFixed}
-          onPress={() => router.push("/create-client")}
+          onPress={() => router.push("/Delete-client")}
         >
           <Text style={styles.addButtonText}>- Delete Client</Text>
         </TouchableOpacity>
       </View>
+    )}
+
       
     </SafeAreaView>
   );
@@ -201,4 +213,10 @@ const styles = StyleSheet.create({
   alignItems: "center",
   gap: 15,
   },
+  singleButtonWrapper: {
+    position: "absolute",
+    bottom: 25,
+    left: 20,
+    right: 20,
+  },  
 });

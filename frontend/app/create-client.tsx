@@ -53,7 +53,7 @@ export default function CreateClientScreen() {
       );
 
       Alert.alert("The client was created successfully!");
-      router.replace("/home");
+      router.replace("/clients");
     } catch (error: any) {
       console.error("Error creating client:", error.response?.data || error.message);
       Alert.alert("Error", "There was a problem creating the client, please try again.");
