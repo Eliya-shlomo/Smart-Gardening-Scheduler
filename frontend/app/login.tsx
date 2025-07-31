@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,51 +10,57 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { BASE_URL_USERS } from "../context/config";
 import axios from "axios";
-
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const router = useRouter();
+  const params = useLocalSearchParams(); 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (params.email) {
+      setEmail(params.email as string);
+    }
+  }, [params]);
 
   const handleSignIn = async () => {
     if (!email || !password) {
       Alert.alert("Please enter both email and password.");
       return;
     }
+
     try {
       const response = await axios.post(`${BASE_URL_USERS}/users/login`, {
         email,
         password,
       });
-  
+
       const token = response.data.access_token;
-  
+
       const userRes = await axios.get(`${BASE_URL_USERS}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
-  
+
       login(userRes.data, token);
       router.push("/home");
-  
+
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         const serverMessage = error.response?.data?.detail;
         console.log("Axios Error:", error.response?.data);
-  
+
         if (typeof serverMessage === "string") {
-          Alert.alert("login failed", serverMessage);
+          Alert.alert("Login failed", serverMessage);
         } else if (Array.isArray(serverMessage)) {
           const message = serverMessage.map((err: any) => err.msg).join("\n");
-          Alert.alert("login failed", message);
+          Alert.alert("Login failed", message);
         } else {
-          Alert.alert("login failed", "Something went wrong. Please try again.");
+          Alert.alert("Login failed", "Something went wrong. Please try again.");
         }
       } else {
         console.log("Unknown Error:", error);
@@ -62,7 +68,6 @@ export default function LoginScreen() {
       }
     }
   };
-  
 
   return (
     <KeyboardAvoidingView

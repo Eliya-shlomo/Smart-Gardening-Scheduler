@@ -72,8 +72,12 @@ export default function AppointmentsScreen() {
 
   const handleAddMeeting = () => {
     const encodedName = encodeURIComponent(name || "");
-    router.push(`/clients/${id}/Delete-meeting?name=${encodedName}`);
+    router.push(`/clients/${id}/create-meeting?name=${encodedName}`);
   };
+  const handleDeleteMeeting = () => {
+    const encodedName = encodeURIComponent(name || "");
+    router.push(`/clients/${id}/Delete-meeting?name=${encodedName}`);
+  }; 
 
 
   return (
